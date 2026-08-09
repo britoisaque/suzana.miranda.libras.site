@@ -21,6 +21,25 @@
     </div>
 
     <section class="panel">
+      <h2>Importar alunos de uma planilha</h2>
+      <p class="panel-sub">
+        Envie um arquivo Excel (.xlsx, .xls) ou CSV com os alunos já cadastrados em outro lugar.
+        O site tenta reconhecer sozinho as colunas pelo nome do cabeçalho — funciona melhor se sua planilha
+        tiver colunas como <b>Nome</b>, <b>Email</b>, <b>Telefone</b>, <b>Curso</b> (ou Módulo),
+        <b>Dia e horário</b> e <b>Data de início</b>. A ordem das colunas não importa, só o nome de cada uma.
+      </p>
+      <div class="field">
+        <label for="import-arquivo">Arquivo da planilha</label>
+        <input id="import-arquivo" type="file" accept=".xlsx,.xls,.csv">
+      </div>
+      <button type="button" id="import-btn" class="btn btn-primary btn-block">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Ler planilha e pré-visualizar
+      </button>
+      <div id="import-status" class="hint" style="margin-top:10px;"></div>
+    </section>
+
+    <section class="panel">
       <h2>Cadastrar aluno</h2>
       <form id="aluno-form">
         <div class="grid-2">
@@ -81,6 +100,7 @@
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
