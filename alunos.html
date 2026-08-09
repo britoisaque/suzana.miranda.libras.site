@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base de Alunos · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Cadastro de alunos</div>
+      <h1>Base de Dados de Alunos</h1>
+      <p>Guarde os dados de contato e do curso de cada aluno. Essa lista também alimenta a aba de Presença e Reposição. Informe a data de início e o site calcula sozinho a previsão de término, com base na duração cadastrada no Painel de Módulos.</p>
+    </div>
+
+    <section class="panel">
+      <h2>Cadastrar aluno</h2>
+      <form id="aluno-form">
+        <div class="grid-2">
+          <div class="field">
+            <label for="aluno-nome">Nome completo</label>
+            <input id="aluno-nome" type="text" placeholder="Ex: Maria Oliveira" required>
+          </div>
+          <div class="field">
+            <label for="aluno-email">Email</label>
+            <input id="aluno-email" type="email" placeholder="maria@email.com">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="aluno-telefone">Telefone</label>
+            <input id="aluno-telefone" type="tel" placeholder="(24) 99999-9999">
+          </div>
+          <div class="field">
+            <label for="aluno-curso">Curso / módulo</label>
+            <select id="aluno-curso"></select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="aluno-dia">Dia e horário do curso (se for por chamada online)</label>
+            <input id="aluno-dia" type="text" placeholder="Ex: Terças, 19h">
+          </div>
+          <div class="field">
+            <label for="aluno-data-inicio">Data de início do curso</label>
+            <input id="aluno-data-inicio" type="date">
+          </div>
+        </div>
+        <p id="aluno-data-fim-preview" class="hint" style="margin:-8px 0 16px;">Escolha o módulo e a data de início para ver a previsão de término.</p>
+        <div class="field">
+          <label>Contrato assinado (opcional)</label>
+          <div id="aluno-contrato-upload-wrap">
+            <input id="aluno-contrato-arquivo" type="file" accept="application/pdf">
+          </div>
+          <div id="aluno-contrato-progress" class="contrato-progress" style="display:none;">
+            <div class="contrato-progress-bar"><div id="aluno-contrato-bar-fill" class="contrato-progress-fill"></div></div>
+            <span id="aluno-contrato-percent">0%</span>
+          </div>
+          <span class="hint">Você pode cadastrar o aluno sem contrato e anexar depois, editando o cadastro.</span>
+        </div>
+        <button type="submit" id="aluno-submit-btn" class="btn btn-primary btn-block">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Cadastrar aluno
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Alunos cadastrados</h2>
+      <div id="alunos-grid" class="student-grid">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="cloud-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

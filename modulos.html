@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Módulos · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Estrutura do curso</div>
+      <h1>Painel de Módulos</h1>
+      <p>Crie módulos, defina a duração do curso e cadastre a numeração e o nome de cada aula. Essa lista alimenta automaticamente o seletor de módulos em Vídeos, Base de Alunos e Presença — inclusive o checklist de aulas concluídas e o cálculo da data prevista de término do aluno.</p>
+    </div>
+
+    <section class="panel">
+      <h2>Criar novo módulo</h2>
+      <form id="modulo-form">
+        <div class="field">
+          <label for="modulo-nome">Nome do módulo</label>
+          <input id="modulo-nome" type="text" placeholder="Ex: Módulo Infantil" required>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="modulo-duracao">Duração do curso (semanas)</label>
+            <input id="modulo-duracao" type="number" min="0" step="1" placeholder="Ex: 10" required>
+          </div>
+          <div class="field">
+            <label for="modulo-qtd-aulas">Quantidade de aulas inicial</label>
+            <input id="modulo-qtd-aulas" type="number" min="0" step="1" placeholder="Ex: 10" required>
+          </div>
+        </div>
+        <span class="hint">As aulas são criadas como "Aula 1", "Aula 2"... — você pode renomear e ajustar a numeração depois de criar o módulo.</span>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top:14px;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Criar módulo
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Seus módulos</h2>
+      <p class="panel-sub">Clique no lápis para editar nome, duração e a lista de aulas de cada módulo.</p>
+      <div id="modulos-panel-grid" class="modulo-grid">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

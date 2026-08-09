@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentos · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Slides, PDFs e contratos</div>
+      <h1>Documentos</h1>
+      <p>Guarde aqui o link ou local de qualquer documento — slides de aula, PDFs — organizado por categoria para achar rápido. Contratos de aluno agora ficam na aba <b>Base de Alunos</b>, junto do card de cada um.</p>
+    </div>
+
+    <section class="panel">
+      <h2>Adicionar documento</h2>
+      <form id="doc-form">
+        <div class="grid-2">
+          <div class="field">
+            <label for="doc-nome">Nome do documento</label>
+            <input id="doc-nome" type="text" placeholder="Ex: PDF Aula de sinais mais usados" required>
+          </div>
+          <div class="field">
+            <label for="doc-categoria">Categoria</label>
+            <select id="doc-categoria">
+              <option>Slides</option>
+              <option>PDF</option>
+              <option>Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="doc-modulo">Módulo relacionado</label>
+          <select id="doc-modulo"><option value="">Nenhum específico</option></select>
+        </div>
+        <div class="field">
+          <label for="doc-link">Link ou local do arquivo</label>
+          <input id="doc-link" type="text" placeholder="Link do Drive, pasta local, etc.">
+        </div>
+        <div class="field">
+          <label for="doc-obs">Observações (opcional)</label>
+          <textarea id="doc-obs" placeholder="Alguma nota rápida sobre esse documento"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Adicionar documento
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px;">
+        <div>
+          <h2 style="margin-bottom:2px;">Seus documentos</h2>
+          <p class="panel-sub" style="margin:0;">Clique para copiar o link ou local do arquivo.</p>
+        </div>
+        <div class="field" style="margin-bottom:0; min-width:180px;">
+          <label for="doc-filter">Filtrar por categoria</label>
+          <select id="doc-filter">
+            <option value="">Todas</option>
+            <option>Slides</option>
+            <option>PDF</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0; min-width:180px;">
+          <label for="doc-filter-modulo">Filtrar por módulo</label>
+          <select id="doc-filter-modulo"><option value="">Todos os módulos</option></select>
+        </div>
+      </div>
+      <div id="docs-list" class="copy-list">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

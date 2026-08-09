@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presença e Reposição · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Controle mensal</div>
+      <h1>Presença e Reposição</h1>
+      <p>Marque presença, falta ou reposição de cada aluno. Os contadores são por mês — troque o mês para ver ou lançar outro período.</p>
+    </div>
+
+    <section class="panel">
+      <p class="panel-sub" style="margin-top:-6px;">Escolha a data antes de clicar em "+ Presente", "+ Faltou" ou "+ Reposição" — os botões vão registrar essa data específica.</p>
+      <div class="att-toolbar">
+        <div class="field">
+          <label for="presenca-mes">Mês vigente</label>
+          <input id="presenca-mes" type="month">
+        </div>
+        <div class="field">
+          <label for="presenca-data">Data do registro</label>
+          <input id="presenca-data" type="date">
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="att-table">
+          <thead>
+            <tr>
+              <th style="width:22%">Aluno</th>
+              <th style="width:28%">Totais do mês</th>
+              <th style="width:28%">Marcar</th>
+              <th style="width:22%">Últimos registros</th>
+            </tr>
+          </thead>
+          <tbody id="presenca-body">
+            <tr><td colspan="4"><div class="empty-state">Carregando…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

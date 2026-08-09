@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma de Aulas · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Módulos do curso</div>
+      <h1>Cronograma de Aulas</h1>
+      <p>Clique num módulo para copiar o texto explicativo (quantidade de aulas, conteúdo e suporte). Clique duas vezes pra editar o texto — a alteração é salva pra todos os dispositivos.</p>
+    </div>
+
+    <section class="panel">
+      <div class="module-grid" id="modulos-grid">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body class="home-body">
+
+  <div class="home-wrap">
+
+    <div class="home-hero">
+      <div class="home-eyebrow">Painel do Curso · Libras</div>
+      <h1 class="home-title">Seja bem-vinda, <span class="home-highlight">Suzana!</span></h1>
+      <p class="home-text">
+        Criamos este espaço para reunir, em um só lugar, todos os vídeos, arquivos, a base de alunos
+        e tudo sobre o seu curso — assim você não precisa mais vasculhar pastas espalhadas pelo notebook.
+        Está tudo online e organizado, pronto para copiar e colar direto para seus alunos, sem complicação.
+        Qualquer dúvida ou ajuste que precisar, é só chamar o criador do site, seu cunhado,
+        <span class="home-highlight">Isaque Brito</span>.
+      </p>
+    </div>
+
+    <div class="home-grid">
+      <a class="home-card" href="videos.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 5v14M16 5v14M3 10h5M16 10h5M3 15h5M16 15h5"/></svg></div>
+        <div class="home-card-name">Vídeos</div>
+        <div class="home-card-sub">Assista e organize as aulas gravadas</div>
+      </a>
+
+      <a class="home-card" href="apoio.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 18a2.5 2.5 0 0 1 2.5-2.5H20"/></svg></div>
+        <div class="home-card-name">Material de Apoio</div>
+        <div class="home-card-sub">Conteúdos extras para reforçar o curso</div>
+      </a>
+
+      <a class="home-card" href="modulos.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m2 8 10-4 10 4-10 4-10-4Z"/><path d="M6 10.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5M22 8v6" stroke-linecap="round"/></svg></div>
+        <div class="home-card-name">Painel de Módulos</div>
+        <div class="home-card-sub">Crie módulos, duração e aulas</div>
+      </a>
+
+      <a class="home-card" href="cronograma.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+        <div class="home-card-name">Cronograma de Aulas</div>
+        <div class="home-card-sub">Veja a estrutura de cada módulo</div>
+      </a>
+
+      <a class="home-card" href="doc.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/></svg></div>
+        <div class="home-card-name">Documentos</div>
+        <div class="home-card-sub">Arquivos e formulários do curso</div>
+      </a>
+
+      <a class="home-card" href="hot.html">
+        <div class="home-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M2.5 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.4a2 2 0 0 0 2-1.6L20.5 7H6"/></svg></div>
+        <div class="home-card-name">Links Hotmart</div>
+        <div class="home-card-sub">Links de venda de cada módulo</div>
+      </a>
+    </div>
+
+  </div>
+
+<script>
+(function () {
+  var HAND_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2.5a1 1 0 0 0-2 0v8.7L9.2 9.1a1.1 1.1 0 1 0-1.6 1.5l3.2 3.6a1 1 0 0 0 .2.17V16H8a1 1 0 1 0 0 2h8.5a3.5 3.5 0 0 0 3.5-3.5V10a1 1 0 1 0-2 0v2H17V8.2a1 1 0 1 0-2 0V10h-.6V6a1 1 0 1 0-2 0v5.4H13V2.5Z"/></svg>';
+
+  var field = document.createElement("div");
+  field.id = "libras-field";
+  document.body.appendChild(field);
+
+  var COUNT = 14;
+  for (var i = 0; i < COUNT; i++) {
+    var size = 26 + Math.random() * 46;
+    var el = document.createElement("div");
+    el.className = "libras-icon";
+    el.style.left = (Math.random() * 96) + "%";
+    el.style.top = (Math.random() * 92) + "%";
+    el.style.width = size + "px";
+    el.style.height = size + "px";
+    el.style.setProperty("--r", (Math.random() * 16 - 8).toFixed(1) + "deg");
+    el.style.animationDuration = (7 + Math.random() * 8) + "s";
+    el.style.animationDelay = (Math.random() * -10).toFixed(1) + "s";
+    el.innerHTML = HAND_ICON;
+    field.appendChild(el);
+  }
+})();
+</script>
+
+<script>
+(function () {
+  if (window.matchMedia && (
+    window.matchMedia("(hover: none), (pointer: coarse)").matches ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  )) return;
+
+  var glow = document.createElement("div");
+  glow.id = "cursor-glow";
+  document.body.appendChild(glow);
+
+  var raf = null;
+  document.addEventListener("mousemove", function (e) {
+    glow.classList.add("active");
+    if (raf) return;
+    raf = requestAnimationFrame(function () {
+      glow.style.transform = "translate3d(" + e.clientX + "px, " + e.clientY + "px, 0) translate(-50%, -50%)";
+      raf = null;
+    });
+  });
+  document.addEventListener("mouseleave", function () { glow.classList.remove("active"); });
+})();
+</script>
+</body>
+</html>

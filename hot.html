@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Links Hotmart · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Vendas</div>
+      <h1>Links da Hotmart</h1>
+      <p>Cole aqui o link de checkout de cada módulo. Clique no botão pra copiar rápido e mandar pro interessado.</p>
+    </div>
+
+    <section class="panel">
+      <h2>Adicionar link</h2>
+      <form id="hotmart-form">
+        <div class="grid-2">
+          <div class="field">
+            <label for="hotmart-nome">Módulo</label>
+            <select id="hotmart-nome" required></select>
+          </div>
+          <div class="field">
+            <label for="hotmart-link">Link Hotmart</label>
+            <input id="hotmart-link" type="url" placeholder="https://pay.hotmart.com/..." required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Adicionar link
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Seus links</h2>
+      <p class="panel-sub">Clique para copiar o link de checkout.</p>
+      <div id="hotmart-list" class="copy-list">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

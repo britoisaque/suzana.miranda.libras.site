@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vídeos das Aulas · Painel do Curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div id="nav-root"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="page-eyebrow">Aulas gravadas</div>
+      <h1>Vídeos das Aulas</h1>
+      <p>Cadastre o nome e o link do YouTube de cada aula. Depois, é só clicar no botão da aula pra copiar o link e mandar pro aluno.</p>
+    </div>
+
+    <section class="panel">
+      <h2>Adicionar aula</h2>
+      <p class="panel-sub">O número sugere automaticamente a próxima aula, mas você pode alterar.</p>
+      <form id="video-form">
+        <div class="grid-2">
+          <div class="field">
+            <label for="video-nome">Nome da aula</label>
+            <input id="video-nome" type="text" placeholder="Ex: Alfabeto manual — parte 1" required>
+          </div>
+          <div class="field">
+            <label for="video-numero">Número da aula</label>
+            <input id="video-numero" type="number" min="0" step="1" required>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="video-modulo">Módulo</label>
+            <select id="video-modulo"></select>
+          </div>
+          <div class="field">
+            <label for="video-link">Link do YouTube</label>
+            <input id="video-link" type="url" placeholder="https://youtu.be/..." required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="video-descricao">Descrição da aula</label>
+          <textarea id="video-descricao" rows="3" placeholder="Ex: Nesta aula você aprende os sinais do alfabeto manual e como usá-los em apresentações pessoais."></textarea>
+          <span class="hint">Essa descrição entra na mensagem que é copiada ao clicar na aula.</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Adicionar aula
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Suas aulas</h2>
+      <p class="panel-sub">Escolha o módulo e clique no botão da aula para copiar uma mensagem explicando o vídeo.</p>
+      <div id="videos-tabs" class="video-tabs"></div>
+      <div id="videos-list" class="copy-list">
+        <div class="empty-state">Carregando…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
