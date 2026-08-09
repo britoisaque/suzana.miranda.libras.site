@@ -187,8 +187,8 @@ const NAV_ITEMS = [
   { href: "apoio.html",      label: "Material de Apoio",   icon: "book" },
   { href: "doc.html",        label: "Documentos",          icon: "file" },
   { href: "presenca.html",   label: "Presença e Reposição",icon: "clock" },
-  { href: "modulos.html",    label: "Cronograma de Aulas",   icon: "graduation" },
-  { href: "cronograma.html", label: "Apresentação   Módulos", icon: "calendar" },
+  { href: "modulos.html",    label: "Painel de Módulos",   icon: "graduation" },
+  { href: "cronograma.html", label: "Cronograma de Aulas", icon: "calendar" },
   { href: "alunos.html",     label: "Base de Alunos",      icon: "users" },
   { href: "hot.html",        label: "Links Hotmart",       icon: "cart" },
 ];
@@ -1385,7 +1385,209 @@ function buildStudentEditCard(id, a, onDone) {
 }
 
 /* ---------------------------------------------------------------------- */
-/* 9b. Aba: Painel de Módulos                                             */
+/* 9b. Aba: Base de Alunos — Importar de planilha (Excel/CSV)            */
+/* ---------------------------------------------------------------------- */
+
+const IMPORT_CAMPOS = {
+  nome: ["nome", "nome completo", "aluno", "nome do aluno"],
+  email: ["email", "e mail"],
+  telefone: ["telefone", "celular", "whatsapp", "fone", "contato"],
+  curso: ["curso", "modulo", "curso modulo", "curso e modulo", "turma"],
+  diaHorario: ["dia e horario", "dia horario", "horario", "dia"],
+  dataInicio: ["data de inicio", "data inicio", "inicio", "data de entrada"],
+};
+
+function normalizarChave(str) {
+  return String(str || "")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function mapearColunasImportacao(cabecalho) {
+  const normalizados = cabecalho.map(normalizarChave);
+  const mapa = {};
+  Object.entries(IMPORT_CAMPOS).forEach(([campo, candidatos]) => {
+    const idx = normalizados.findIndex(h => candidatos.includes(h));
+    if (idx !== -1) mapa[campo] = idx;
+  });
+  return mapa;
+}
+
+function excelSerialParaISO(serial) {
+  // O Excel conta os dias a partir de 30/12/1899.
+  const ms = Math.round((Number(serial) - 25569) * 86400 * 1000);
+  const d = new Date(ms);
+  return isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
+}
+
+function parseDataFlexivel(valor) {
+  if (valor === null || valor === undefined || valor === "") return "";
+  if (typeof valor === "number") return excelSerialParaISO(valor);
+  const str = String(valor).trim();
+  let m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+  m = str.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})/);
+  if (m) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  return "";
+}
+
+function encontrarModuloParecido(nomeCurso) {
+  if (!nomeCurso) return "";
+  const alvo = normalizarChave(nomeCurso);
+  const exato = MODULOS_CACHE.find(m => normalizarChave(m.nome) === alvo);
+  if (exato) return exato.nome;
+  const parcial = MODULOS_CACHE.find(m => normalizarChave(m.nome).includes(alvo) || alvo.includes(normalizarChave(m.nome)));
+  return parcial ? parcial.nome : "";
+}
+
+function initImportAlunos() {
+  const fileInput = $("#import-arquivo");
+  const btn = $("#import-btn");
+  const statusEl = $("#import-status");
+  if (!fileInput || !btn || !FIREBASE_OK) return;
+
+  btn.addEventListener("click", () => {
+    const file = fileInput.files[0];
+    if (!file) { toast("Escolha um arquivo primeiro"); return; }
+    if (typeof XLSX === "undefined") {
+      statusEl.textContent = "Não foi possível carregar o leitor de planilhas — verifique sua conexão e recarregue a página.";
+      return;
+    }
+
+    statusEl.textContent = "Lendo arquivo…";
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: "array" });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const linhas = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: true });
+
+        if (!linhas.length) { statusEl.textContent = "A planilha está vazia."; return; }
+
+        const cabecalho = linhas[0];
+        const mapa = mapearColunasImportacao(cabecalho);
+        if (mapa.nome === undefined) {
+          statusEl.textContent = 'Não encontrei uma coluna de nome na planilha. Renomeie a coluna para "Nome" e tente de novo.';
+          return;
+        }
+
+        const registros = linhas.slice(1)
+          .filter(row => row.some(c => String(c).trim() !== ""))
+          .map((row) => {
+            const nome = String(row[mapa.nome] ?? "").trim();
+            const email = mapa.email !== undefined ? String(row[mapa.email] ?? "").trim() : "";
+            const telefone = mapa.telefone !== undefined ? String(row[mapa.telefone] ?? "").trim() : "";
+            const cursoBruto = mapa.curso !== undefined ? String(row[mapa.curso] ?? "").trim() : "";
+            const diaHorario = mapa.diaHorario !== undefined ? String(row[mapa.diaHorario] ?? "").trim() : "";
+            const dataInicio = mapa.dataInicio !== undefined ? parseDataFlexivel(row[mapa.dataInicio]) : "";
+            const curso = encontrarModuloParecido(cursoBruto);
+            const mod = curso ? moduloPorNome(curso) : null;
+            const dataFimPrevista = calcularDataFim(dataInicio, mod ? mod.duracaoSemanas : 0);
+            return { nome, email, telefone, curso, cursoBruto, diaHorario, dataInicio, dataFimPrevista };
+          })
+          .filter(r => r.nome);
+
+        if (!registros.length) {
+          statusEl.textContent = "Nenhum aluno com nome preenchido foi encontrado nessa planilha.";
+          return;
+        }
+        statusEl.textContent = "";
+        abrirPreviewImportacao(registros);
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "Não foi possível ler esse arquivo — confira se é um .xlsx, .xls ou .csv válido.";
+      }
+    };
+    reader.onerror = () => { statusEl.textContent = "Erro ao ler o arquivo."; };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function abrirPreviewImportacao(registros) {
+  const semModulo = registros.filter(r => r.cursoBruto && !r.curso).length;
+
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.innerHTML = `
+    <div class="modal-box" style="max-width:720px;">
+      <div class="modal-head">
+        <h3>Pré-visualizar importação</h3>
+        <button type="button" class="modal-close" title="Fechar">✕</button>
+      </div>
+      <p class="panel-sub" style="margin-top:-4px;">
+        ${registros.length} aluno(s) encontrado(s) na planilha.
+        ${semModulo ? `<br>⚠️ ${semModulo} com o curso da planilha não reconhecido entre os módulos cadastrados — serão importados sem módulo definido, e dá pra ajustar depois editando o cadastro.` : ""}
+      </p>
+      <div style="max-height:360px; overflow:auto; border:1px solid var(--border, var(--gold-line)); border-radius:10px;">
+        <table class="att-table" style="width:100%;">
+          <thead><tr><th>Nome</th><th>Curso</th><th>Início</th><th>Contato</th></tr></thead>
+          <tbody>
+            ${registros.map(r => `
+              <tr>
+                <td>${esc(r.nome)}</td>
+                <td>${r.curso ? esc(r.curso) : (r.cursoBruto ? `"${esc(r.cursoBruto)}" (não reconhecido)` : "—")}</td>
+                <td>${r.dataInicio ? esc(fmtDateBR(r.dataInicio)) : "—"}</td>
+                <td>${esc(r.email || r.telefone || "—")}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="student-edit-buttons" style="margin-top:16px;">
+        <button type="button" class="btn btn-sm imp-cancel">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-sm imp-confirm">Importar ${registros.length} aluno(s)</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const fechar = () => overlay.remove();
+  $(".modal-close", overlay).addEventListener("click", fechar);
+  $(".imp-cancel", overlay).addEventListener("click", fechar);
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) fechar(); });
+
+  $(".imp-confirm", overlay).addEventListener("click", async () => {
+    const confirmBtn = $(".imp-confirm", overlay);
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "Importando…";
+    try {
+      await salvarAlunosEmLote(registros);
+      toast(`${registros.length} aluno(s) importado(s)!`);
+      fechar();
+    } catch (err) {
+      console.error(err);
+      toast("Erro ao importar — veja o console (F12)");
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = `Importar ${registros.length} aluno(s)`;
+    }
+  });
+}
+
+async function salvarAlunosEmLote(registros) {
+  const TAMANHO_LOTE = 400; // o Firestore permite no máximo 500 operações por lote
+  for (let i = 0; i < registros.length; i += TAMANHO_LOTE) {
+    const fatia = registros.slice(i, i + TAMANHO_LOTE);
+    const batch = db.batch();
+    fatia.forEach((r) => {
+      const ref = db.collection("alunos").doc();
+      batch.set(ref, {
+        nome: r.nome,
+        email: r.email,
+        telefone: r.telefone,
+        curso: r.curso,
+        diaHorario: r.diaHorario,
+        dataInicio: r.dataInicio,
+        dataFimPrevista: r.dataFimPrevista,
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+    await batch.commit();
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 9c. Aba: Painel de Módulos                                             */
 /* ---------------------------------------------------------------------- */
 
 function initModulosPanel() {
@@ -1658,5 +1860,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initModulosPanel();
   initCronograma();
   initAlunos();
+  initImportAlunos();
   initHotmart();
 });
