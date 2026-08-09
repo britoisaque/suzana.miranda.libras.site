@@ -12,6 +12,8 @@
    ========================================================================== */
 
 const ALLOWED_EMAILS = [
-  "suzana@gmail.com",
-  "isaque@gmail.com",
+  "isaquebrito22052006@gmail.com",
+  "suzana.professora.libras@gmail.com",
+  "marcosbrito1204@gmail.com",
+  "marcos.brito.audio@gmail.com",
 ];
