@@ -1835,31 +1835,41 @@ function buildCopyItem({ numLabel, icon, title, sub, tag, copyValue, onDelete })
 /* ---------------------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderLibrasField();
-  injectNav();
-  initCursorGlow();
+  function boot() {
+    renderLibrasField();
+    injectNav();
+    initCursorGlow();
 
-  if (!FIREBASE_OK) {
-    const main = $(".main");
-    if (main) {
-      const warn = document.createElement("div");
-      warn.className = "panel";
-      warn.style.borderColor = "#4a2422";
-      warn.innerHTML = `<h2 style="color:var(--red)">⚠ Firebase não configurado</h2>
-        <p class="panel-sub">Abra o arquivo <b>firebase-config.js</b> e cole as chaves do seu projeto Firebase.
-        Veja o passo a passo em <b>INSTRUCOES.md</b>.</p>`;
-      main.prepend(warn);
+    if (!FIREBASE_OK) {
+      const main = $(".main");
+      if (main) {
+        const warn = document.createElement("div");
+        warn.className = "panel";
+        warn.style.borderColor = "#4a2422";
+        warn.innerHTML = `<h2 style="color:var(--red)">⚠ Firebase não configurado</h2>
+          <p class="panel-sub">Abra o arquivo <b>firebase-config.js</b> e cole as chaves do seu projeto Firebase.
+          Veja o passo a passo em <b>INSTRUCOES.md</b>.</p>`;
+        main.prepend(warn);
+      }
+      return;
     }
-    return;
+
+    initVideos();
+    initApoio();
+    initDocs();
+    initPresenca();
+    initModulosPanel();
+    initCronograma();
+    initAlunos();
+    initImportAlunos();
+    initHotmart();
   }
 
-  initVideos();
-  initApoio();
-  initDocs();
-  initPresenca();
-  initModulosPanel();
-  initCronograma();
-  initAlunos();
-  initImportAlunos();
-  initHotmart();
+  // Só inicia o app depois que o auth-guard.js confirmar um login autorizado.
+  // Se o login já tiver sido confirmado antes deste script rodar, inicia na hora.
+  if (window.__PAINEL_AUTH_USER__) {
+    boot();
+  } else {
+    window.addEventListener("painel:auth-ready", boot, { once: true });
+  }
 });
