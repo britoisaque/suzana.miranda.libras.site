@@ -76,6 +76,23 @@
       showLogin("Erro de configuração: auth-config.js não foi carregado nesta página.");
       return;
     }
+    if (typeof firebaseConfig === "undefined") {
+      showLogin("Erro de configuração: firebase-config.js não foi carregado nesta página.");
+      return;
+    }
+
+    // O script.js normalmente é quem inicializa o Firebase App, mas ele só
+    // carrega DEPOIS deste arquivo — então inicializamos aqui se ainda não
+    // tiver sido feito, pra poder usar o Auth já de cara.
+    if (!firebase.apps || !firebase.apps.length) {
+      try {
+        firebase.initializeApp(firebaseConfig);
+      } catch (err) {
+        console.error(err);
+        showLogin("Erro ao inicializar o Firebase. Confira o firebase-config.js.");
+        return;
+      }
+    }
 
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
