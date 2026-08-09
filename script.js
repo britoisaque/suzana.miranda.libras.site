@@ -17,7 +17,9 @@ try{
   if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes("SUA_API_KEY")) {
     throw new Error("firebase-config.js ainda está com os valores de exemplo");
   }
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps || !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
   db = firebase.firestore();
   FIREBASE_OK = true;
 }catch(err){
